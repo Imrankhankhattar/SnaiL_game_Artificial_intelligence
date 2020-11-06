@@ -64,14 +64,38 @@ class Game(arcade.View):
                     x = x+60
                 x = 0
                 y = y-60
-#on mouse press function
+
     def on_mouse_press(self, x, y, _button, _modifiers):
         if self.state == "GameOn":
             if self.human == 1:
-                for i in range(9,-1,-1):
-                    for j in range(10):
-                         if self.board[i][j] == 20:
-                            self.board[i][j] = 2 
+                check_variable=0
+                try:#restricting user to not click on already clicked block
+                    x1=0
+                    x2=60
+                    y1=0
+                    y2=60
+                    for i in range(9,-1,-1):
+                        for j in range(10):
+                            if x1 <= x <= x2 and y1 <= y <= y2:
+                                if self.board[i][j] ==20:
+                                    check_variable+=1
+                                elif self.board[i][j] != 0:
+                                    check_variable+=1
+                            x1=x2
+                            x2=x2+60
+                        y1=y2
+                        y2=y2+60
+                        x1=0
+                        x2=60
+                except Exception:
+                    pass
+                if check_variable==0:#if he clicks on empty block update frontend and board
+                    for i in range(9,-1,-1):
+                        for j in range(10):
+                           if self.board[i][j] == 20:
+                              self.board[i][j] = 2 
+                else:
+                    pass   
                 try:
                     x1=0
                     x2=60
@@ -82,6 +106,8 @@ class Game(arcade.View):
                             if x1 <= x <= x2 and y1 <= y <= y2:
                                 if self.board[i][j] == 0:
                                     self.board[i][j] = 20 
+                                else:
+                                      raise Exception 
                             x1=x2
                             x2=x2+60
                         y1=y2
@@ -91,10 +117,37 @@ class Game(arcade.View):
                 except Exception:
                     pass
             if self.human == 2:
-                for i in range(9,-1,-1):
-                    for j in range(10):
-                        if self.board[i][j] == 10:
-                           self.board[i][j] = 1
+                check_variable=0
+                try:#restricting user to not click on already clicked block
+                    x1=540
+                    x2=600
+                    y1=540
+                    y2=600
+                    for i in range(10):
+                        for j in range(9,-1,-1):
+                            if x1 <= x <= x2 and y1 <= y <= y2:
+                                if self.board[i][j] ==10:
+                                    check_variable+=1
+                                elif self.board[i][j] != 0:
+                                    check_variable+=1 
+                                else:
+                                    pass
+                            x2=x1
+                            x1=x1-60
+                        y2=y1
+                        y1=y1-60
+                        x1=540
+                        x2=600
+                except Exception:
+                    pass  
+
+                if check_variable==0:#if he clicks on empty block update frontend and board
+                    for i in range(9,-1,-1):
+                        for j in range(10):
+                            if self.board[i][j] == 10:
+                                self.board[i][j] = 1
+                else:
+                    pass
                 try:
                     x1=540
                     x2=600
