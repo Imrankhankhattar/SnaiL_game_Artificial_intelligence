@@ -68,6 +68,9 @@ class Game(arcade.View):
     def on_mouse_press(self, x, y, _button, _modifiers):
         if self.state == "GameOn":
             if self.human == 1:
+                Sum=0
+                Row_num=0
+                col_num=0
                 check_variable=0
                 try:#restricting user to not click on already clicked block
                     x1=0
@@ -93,7 +96,10 @@ class Game(arcade.View):
                     for i in range(9,-1,-1):
                         for j in range(10):
                            if self.board[i][j] == 20:
-                              self.board[i][j] = 2 
+                            Sum=i+j
+                            Row_num=j
+                            col_num=i
+                            self.board[i][j] = 2 
                 else:
                     pass   
                 try:
@@ -105,7 +111,13 @@ class Game(arcade.View):
                         for j in range(10):
                             if x1 <= x <= x2 and y1 <= y <= y2:
                                 if self.board[i][j] == 0:
-                                    self.board[i][j] = 20 
+                                    if Sum==(i+j)+1 or Sum==(i+j)-1:
+                                        if Row_num+1==j or col_num+1==i or Row_num-1==j or col_num-1==i:
+                                            self.board[i][j] = 20
+                                        else:
+                                            raise Exception     
+                                    else:
+                                        raise Exception    
                                 else:
                                       raise Exception 
                             x1=x2
@@ -117,6 +129,9 @@ class Game(arcade.View):
                 except Exception:
                     pass
             if self.human == 2:
+                Row_num=0
+                col_num=0
+                Sum=0
                 check_variable=0
                 try:#restricting user to not click on already clicked block
                     x1=540
@@ -128,7 +143,7 @@ class Game(arcade.View):
                             if x1 <= x <= x2 and y1 <= y <= y2:
                                 if self.board[i][j] ==10:
                                     check_variable+=1
-                                elif self.board[i][j] != 0:
+                                elif self.board[i][j]!= 0:
                                     check_variable+=1 
                                 else:
                                     pass
@@ -145,6 +160,9 @@ class Game(arcade.View):
                     for i in range(9,-1,-1):
                         for j in range(10):
                             if self.board[i][j] == 10:
+                                Sum=i+j
+                                Row_num=j
+                                col_num=i
                                 self.board[i][j] = 1
                 else:
                     pass
@@ -157,7 +175,13 @@ class Game(arcade.View):
                         for j in range(9,-1,-1):
                             if x1 <= x <= x2 and y1 <= y <= y2:
                                 if self.board[i][j] == 0:
-                                    self.board[i][j] = 10
+                                    if Sum==(i+j)+1 or Sum==(i+j)-1:
+                                        if Row_num+1==j or col_num+1==i or Row_num-1==j or col_num-1==i:
+                                           self.board[i][j] = 10
+                                        else:
+                                            raise Exception    
+                                    else:
+                                        raise Exception
                             x2=x1
                             x1=x1-60
                         y2=y1
