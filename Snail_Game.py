@@ -1,6 +1,5 @@
 import arcade
 import random
-
 cross = arcade.load_texture("11-removebg-preview.png")
 circle = arcade.load_texture("12-removebg-preview.png")
 splash1= arcade.load_texture("sp1.png")
@@ -84,6 +83,10 @@ class Game(arcade.View):
                                     check_variable+=1
                                 elif self.board[i][j] != 0:
                                     check_variable+=1
+                                elif self.board[i][j] == 0:
+                                    check_r=j
+                                    check_c=i
+                                    check_sum=i+j
                             x1=x2
                             x2=x2+60
                         y1=y2
@@ -96,10 +99,17 @@ class Game(arcade.View):
                     for i in range(9,-1,-1):
                         for j in range(10):
                            if self.board[i][j] == 20:
-                            Sum=i+j
-                            Row_num=j
-                            col_num=i
-                            self.board[i][j] = 2 
+                                Sum=i+j
+                                Row_num=j
+                                col_num=i
+                                if j-check_r==1 or j-check_r==-1 :  
+                                    if i-check_c==0 :
+                                        if Sum-check_sum==1 or Sum-check_sum==-1:
+                                            self.board[i][j] = 2 
+                                elif i-check_c==-1  or  i-check_c==1  :  
+                                    if j-check_r==0:
+                                        if Sum-check_sum==1 or Sum-check_sum==-1:
+                                            self.board[i][j] = 2               
                 else:
                     pass   
                 try:
@@ -143,10 +153,12 @@ class Game(arcade.View):
                             if x1 <= x <= x2 and y1 <= y <= y2:
                                 if self.board[i][j] ==10:
                                     check_variable+=1
-                                elif self.board[i][j]!= 0:
+                                elif self.board[i][j]!=0:
                                     check_variable+=1 
-                                else:
-                                    pass
+                                elif self.board[i][j]==0:
+                                    check_r=j
+                                    check_c=i
+                                    check_sum=i+j
                             x2=x1
                             x1=x1-60
                         y2=y1
@@ -163,7 +175,14 @@ class Game(arcade.View):
                                 Sum=i+j
                                 Row_num=j
                                 col_num=i
-                                self.board[i][j] = 1
+                                if j-check_r==1 or j-check_r==-1 :  
+                                    if i-check_c==0 :
+                                        if Sum-check_sum==1 or Sum-check_sum==-1:
+                                            self.board[i][j] = 1
+                                elif i-check_c==-1  or  i-check_c==1  :  
+                                    if j-check_r==0:
+                                        if Sum-check_sum==1 or Sum-check_sum==-1:
+                                            self.board[i][j] = 1
                 else:
                     pass
                 try:
