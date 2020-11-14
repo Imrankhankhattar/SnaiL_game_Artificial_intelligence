@@ -93,6 +93,7 @@ class Game(arcade.View):
                                  645, 40, arcade.color.RAJAH, font_size=24)
 
             # arcade.draw_text("Player '2' TURN",
+            # arcade.draw_text("Player '2' TURN",
             #                  620, 150, arcade.color.WHITE, font_size=20)
             for i in range(0, 600, 60):
                 arcade.draw_line(0, i, 600, i, arcade.color.WHITE, 2)
