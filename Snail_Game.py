@@ -331,6 +331,7 @@ class Game(arcade.View):
                             x1 = 540
                             x2 = 600
                         # print("turning to bot:Human2")
+                        #changing
                         self.turn = "bot"
                     except Exception:
                         pass
