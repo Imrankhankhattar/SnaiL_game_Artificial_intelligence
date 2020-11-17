@@ -36,10 +36,10 @@ class Game(arcade.View):
                              400, 250, arcade.color.WHITE, font_size=30, anchor_x="center")
         elif self.state == "GameOn":
             self.shape_list = arcade.ShapeElementList()
-            # updating scores
+            # updating scores on screen
             ouput1 = f"Score: {self.score_1}"
             ouput2 = f"Score: {self.score_2}"
-            # ouput2=self.score_2
+            # drawing scores for both players
             arcade.draw_text(ouput1,
                              630, 160, arcade.color.WHITE, font_size=26)
             arcade.draw_text(ouput2,
@@ -57,24 +57,26 @@ class Game(arcade.View):
             arcade.draw_text("Player 2",
                              640, 310, arcade.color.WHITE, font_size=30)
             arcade.draw_lrwh_rectangle_textured(640, 200, 100, 100, circle)
-            # drawing for turn
+            # drawing  turn
             arcade.draw_rectangle_outline(700, 70, 178, 115,
                                           arcade.color.GREEN, 4)
 
             arcade.draw_text("TURN",
                              655, 90, arcade.color.BABY_BLUE, font_size=25)
+            #displaying turn of player                 
             if self.turn == "Human":
                 arcade.draw_text("Player '2'",
                                  645, 40, arcade.color.RASPBERRY, font_size=24)
             elif self.turn == "bot":
                 arcade.draw_text("Player '1'",
                                  645, 40, arcade.color.RAJAH, font_size=24)
+            #drawing lines                     
             for i in range(0, 600, 60):
                 arcade.draw_line(0, i, 600, i, arcade.color.WHITE, 2)
 
             for i in range(0, 660, 60):
                 arcade.draw_line(i, 0, i, 600, arcade.color.WHITE, 2)
-
+            #checking where to have snails and their splashes
             x = 0
             y = 540
             for i in range(10):
@@ -94,10 +96,10 @@ class Game(arcade.View):
                     x = x+60
                 x = 0
                 y = y-60
-           
+                #win condition  
             if self.score_1 > 50 or self.score_2>50:
                 self.state="win"
-
+        #changing game state
         elif self.state == "win":
             if self.score_1 > self.score_2 :
                 arcade.draw_text("Player '2' WON",
@@ -112,7 +114,7 @@ class Game(arcade.View):
     def on_mouse_press(self, x, y, _button, _modifiers):
         if self.state == "GameOn":
             if self.turn == "Human":
-                for i in range(9, -1, -1):#loop for finding snail position
+                for i in range(9, -1, -1):# finding snail position
                     for j in range(10):
                         if self.board[i][j] == 20:
                             slip_x_old=i
@@ -122,7 +124,7 @@ class Game(arcade.View):
                     Row_num = 0
                     col_num = 0
                     check_variable = 0
-                    try:  # restricting user to not click on already clicked block
+                    try:  # restricting user 
                         x1 = 0
                         x2 = 60
                         y1 = 0
@@ -157,6 +159,7 @@ class Game(arcade.View):
                                     Sum = i+j
                                     Row_num = j
                                     col_num = i
+                                    # if he do not  clicks on adjacent blocks ,turn lost
                                     if j-check_r > 1 or j-check_r < -1:
                                         self.turn = "bot"
                                         print("step1")
@@ -165,6 +168,7 @@ class Game(arcade.View):
                                         self.turn = "bot" 
                                         print("step1")  
                                         return
+                                    # if he clicks on adjacent blocks  update backend array and frontend  
                                     elif j-check_r == 1 or j-check_r == -1:
                                         if i-check_c == 0:
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
@@ -173,9 +177,9 @@ class Game(arcade.View):
                                         if j-check_r == 0:
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
                                                 self.board[i][j] = 2
+                    #slip Conditions                            
                     elif check_variable==11:
-                        if slip_x_old==slip_x_new and slip_y_new==slip_y_old+1:
-                            print("forward")
+                        if slip_x_old==slip_x_new and slip_y_new==slip_y_old+1:#forward slip
                             for i in range(9-slip_y_old):
                                 if self.board[slip_x_old][slip_y_new]==2:
                                     pass
@@ -186,8 +190,7 @@ class Game(arcade.View):
                             self.board[slip_x_old][slip_y_old]=2
                             self.turn = "bot"
                             return
-                        elif slip_x_old==slip_x_new and slip_y_new==slip_y_old-1:
-                            print("back")
+                        elif slip_x_old==slip_x_new and slip_y_new==slip_y_old-1:#backward slip
                             for i in range(slip_y_old+1):
                                 if self.board[slip_x_old][slip_y_new]==2:
                                     pass
@@ -199,8 +202,7 @@ class Game(arcade.View):
                             self.turn = "bot"
                             return
                             
-                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old+1:
-                            print("down")
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old+1:#downward slip
                             for i in range(9-slip_x_old):
                                 if self.board[slip_x_new][slip_y_old]==2:
                                     pass
@@ -211,8 +213,7 @@ class Game(arcade.View):
                             self.board[slip_x_old][slip_y_old]=2
                             self.turn = "bot"
                             return
-                            
-                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old-1:
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old-1:#upward slip
                             print("up")
                             for i in range(slip_x_old+1):
                                 if self.board[slip_x_new][slip_y_old]==2:
@@ -224,10 +225,10 @@ class Game(arcade.View):
                             self.board[slip_x_old][slip_y_old]=2
                             self.turn = "bot"
                             return
-                        else:
+                        else:#otherwise he will lose turn
                             self.turn = "bot"
                             return
-                    try:
+                    try:#block if players do a valid move update frontend and backend array as well
                         x1 = 0
                         x2 = 60
                         y1 = 0
@@ -240,11 +241,11 @@ class Game(arcade.View):
                                             if Row_num+1 == j or Row_num-1 == j:
                                                 if col_num == i:
                                                     self.board[i][j] = 20
-                                                    self.score_1 = self.score_1+1
+                                                    self.score_1 = self.score_1+1#update score
                                             elif col_num-1 == i or col_num+1 == i:
                                                 if Row_num == j:
                                                     self.board[i][j] = 20
-                                                    self.score_1 = self.score_1+1
+                                                    self.score_1 = self.score_1+1#update score
 
                                             else:
                                                 raise Exception
@@ -258,7 +259,7 @@ class Game(arcade.View):
                             y2 = y2+60
                             x1 = 0
                             x2 = 60
-                        # print("turning to bot:Human1")
+                        #change turn
                         self.turn = "bot"
                     except Exception:
                         pass
@@ -326,9 +327,8 @@ class Game(arcade.View):
                                         if j-check_r == 0:
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
                                                 self.board[i][j] = 1
-                    elif check_variable==11:
+                    elif check_variable==11:#slip conditions
                         if slip_x_old==slip_x_new and slip_y_new==slip_y_old+1:
-                            print("forward")
                             for i in range(9-slip_y_old):
                                 if self.board[slip_x_old][slip_y_new]==1:
                                     pass
@@ -340,7 +340,6 @@ class Game(arcade.View):
                             self.turn = "Human"
                             return
                         elif slip_x_old==slip_x_new and slip_y_new==slip_y_old-1:
-                            print("back")
                             for i in range(slip_y_old+1):
                                 if self.board[slip_x_old][slip_y_new]==1:
                                     pass
@@ -353,7 +352,6 @@ class Game(arcade.View):
                             return
                             
                         elif slip_y_old==slip_y_new and slip_x_new==slip_x_old+1:
-                            print("down")
                             for i in range(9-slip_x_old):
                                 if self.board[slip_x_new][slip_y_old]==1:
                                     pass
@@ -366,7 +364,6 @@ class Game(arcade.View):
                             return
                             
                         elif slip_y_old==slip_y_new and slip_x_new==slip_x_old-1:
-                            print("up")
                             for i in range(slip_x_old+1):
                                 if self.board[slip_x_new][slip_y_old]==1:
                                     pass
@@ -415,7 +412,7 @@ class Game(arcade.View):
                         self.turn = "Human"
                     except Exception:
                         pass              
-            try:
+            try:#try block to check win stage
                 win = 0
                 for i in range(10):
                     for j in range(10):
@@ -425,7 +422,7 @@ class Game(arcade.View):
                     self.state = "win"
             except Exception:
                 pass
-if __name__ == "__main__":
+if __name__ == "__main__":#main function
     window = arcade.Window(800, 600, "Tic Tac Toe")
     game_view = Game()
     window.show_view(game_view)
