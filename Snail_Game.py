@@ -135,11 +135,11 @@ class Game(arcade.View):
         if self.state == "GameOn":
             if self.turn == "Human":
                 for i in range(9, -1, -1):#loop for finding snail position
-                        for j in range(10):
-                            if self.board[i][j] == 20:
-                                slip_x_position=i
-                                slip_y_position=j
-                                break
+                    for j in range(10):
+                        if self.board[i][j] == 20:
+                            slip_x_old=i
+                            slip_y_old=j
+                            break
                 if self.human == 1:
                     Sum = 0
                     Row_num = 0
@@ -157,6 +157,8 @@ class Game(arcade.View):
                                         check_variable += 1
                                     elif self.board[i][j] == 2:#checking if user clicks on his own track.....
                                         check_variable = 11    
+                                        slip_x_new=i
+                                        slip_y_new=j
                                     elif self.board[i][j] != 0:
                                         check_variable += 1
                                     elif self.board[i][j] == 0:
@@ -195,19 +197,61 @@ class Game(arcade.View):
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
                                                 self.board[i][j] = 2
 
-                    else:
-                        pass
-                    # try:#sliping
-                    #     for i in range(9, -1, -1):
-                    #         for j in range(10):
-                    #                 if self.board[i][j] ==2:
-
+                    elif check_variable==11:
+                        if slip_x_old==slip_x_new and slip_y_new==slip_y_old+1:
+                            print("forward")
+                            for i in range(9-slip_y_old):
+                                if self.board[slip_x_old][slip_y_new]==2:
+                                    pass
+                                else:
+                                    break
+                                slip_y_new=slip_y_new+1   
+                            self.board[slip_x_old][slip_y_new-1]=20
+                            self.board[slip_x_old][slip_y_old]=2
+                            self.turn = "bot"
+                            return
+                        elif slip_x_old==slip_x_new and slip_y_new==slip_y_old-1:
+                            print("back")
+                            for i in range(slip_y_old+1):
+                                if self.board[slip_x_old][slip_y_new]==2:
+                                    pass
+                                else:
+                                    break
+                                slip_y_new=slip_y_new-1   
+                            self.board[slip_x_old][slip_y_new+1]=20
+                            self.board[slip_x_old][slip_y_old]=2
+                            self.turn = "bot"
+                            return
                             
-                    # else:
-                    #     pass
-                    #  if self.board[slip_x_position][slip_y_position] ==0:
-                    #                 self.board[slip_x_position][slip_y_position-1]==2
-                    #             slip_y_position-=1
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old+1:
+                            print("down")
+                            for i in range(9-slip_x_old):
+                                if self.board[slip_x_new][slip_y_old]==2:
+                                    pass
+                                else:
+                                    break
+                                slip_x_new=slip_x_new+1   
+                            self.board[slip_x_new-1][slip_y_old]=20
+                            self.board[slip_x_old][slip_y_old]=2
+                            self.turn = "bot"
+                            return
+                            
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old-1:
+                            print("up")
+                            for i in range(slip_x_old+1):
+                                if self.board[slip_x_new][slip_y_old]==2:
+                                    pass
+                                else:
+                                    break
+                                slip_x_new=slip_x_new-1   
+                            self.board[slip_x_new+1][slip_y_old]=20
+                            self.board[slip_x_old][slip_y_old]=2
+                            self.turn = "bot"
+                            return
+                        else:
+                            self.turn = "bot"
+                            return
+                    
                             
 
                     try:
@@ -260,6 +304,10 @@ class Game(arcade.View):
                                 if x1 <= x <= x2 and y1 <= y <= y2:
                                     if self.board[i][j] == 10:
                                         check_variable += 1
+                                    elif self.board[i][j] == 1:
+                                        check_variable = 11
+                                        slip_x_new=i
+                                        slip_y_new=j
                                     elif self.board[i][j] != 0:
                                         check_variable += 1
                                     elif self.board[i][j] == 0:
@@ -299,6 +347,15 @@ class Game(arcade.View):
                                         if j-check_r == 0:
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
                                                 self.board[i][j] = 1
+                    elif check_variable==11:
+                        if slip_x_old==slip_x_new and slip_y_old==slip_y_new+1:
+                            print("1")
+                        elif slip_x_old==slip_x_new and slip_y_old==slip_y_new-1:
+                            print("2")
+                        elif slip_y_old==slip_y_new and slip_x_old==slip_x_new+1:
+                            print("3")
+                        elif slip_y_old==slip_y_new and slip_x_old==slip_x_new-1:
+                            print("4")                            
 
                     else:
                         pass
@@ -342,6 +399,7 @@ class Game(arcade.View):
                     Row_num = 0
                     col_num = 0
                     check_variable = 0
+                    
                     try:  # restricting user to not click on already clicked block
                         x1 = 0
                         x2 = 60
@@ -350,9 +408,12 @@ class Game(arcade.View):
                         for i in range(9, -1, -1):
                             for j in range(10):
                                 if x1 <= x <= x2 and y1 <= y <= y2:
-                                    if self.board[i][j] == 20:
-                                        check_variable += 1
+                                    if self.board[i][j] == 2:
+                                        print("displaying")
+                                        check_variable += 1    
                                     elif self.board[i][j] != 0:
+                                        check_variable += 1
+                                    elif self.board[i][j] == 20:
                                         check_variable += 1
                                     elif self.board[i][j] == 0:
                                         check_r = j
@@ -433,6 +494,12 @@ class Game(arcade.View):
                     col_num = 0
                     Sum = 0
                     check_variable = 0
+                    for i in range(9, -1, -1):#loop for finding snail position
+                        for j in range(10):
+                            if self.board[i][j] == 10:
+                                slip_x_old=i
+                                slip_y_old=j
+                                break
                     try:  # restricting user to not click on already clicked block
                         x1 = 540
                         x2 = 600
@@ -441,8 +508,12 @@ class Game(arcade.View):
                         for i in range(10):
                             for j in range(9, -1, -1):
                                 if x1 <= x <= x2 and y1 <= y <= y2:
-                                    if self.board[i][j] == 10:
-                                        check_variable += 1
+                                    if self.board[i][j] == 1:
+                                        check_variable = 11    
+                                        slip_x_new=i
+                                        slip_y_new=j    
+                                    elif self.board[i][j] == 10:
+                                        check_variable += 1  
                                     elif self.board[i][j] != 0:
                                         check_variable += 1
                                     elif self.board[i][j] == 0:
@@ -482,8 +553,60 @@ class Game(arcade.View):
                                         if j-check_r == 0:
                                             if Sum-check_sum == 1 or Sum-check_sum == -1:
                                                 self.board[i][j] = 1
-
-                        pass
+                    elif check_variable==11:
+                        if slip_x_old==slip_x_new and slip_y_new==slip_y_old+1:
+                            print("forward")
+                            for i in range(9-slip_y_old):
+                                if self.board[slip_x_old][slip_y_new]==1:
+                                    pass
+                                else:
+                                    break
+                                slip_y_new=slip_y_new+1   
+                            self.board[slip_x_old][slip_y_new-1]=10
+                            self.board[slip_x_old][slip_y_old]=1
+                            self.turn = "Human"
+                            return
+                        elif slip_x_old==slip_x_new and slip_y_new==slip_y_old-1:
+                            print("back")
+                            for i in range(slip_y_old+1):
+                                if self.board[slip_x_old][slip_y_new]==1:
+                                    pass
+                                else:
+                                    break
+                                slip_y_new=slip_y_new-1   
+                            self.board[slip_x_old][slip_y_new+1]=10
+                            self.board[slip_x_old][slip_y_old]=1
+                            self.turn = "Human"
+                            return
+                            
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old+1:
+                            print("down")
+                            for i in range(9-slip_x_old):
+                                if self.board[slip_x_new][slip_y_old]==1:
+                                    pass
+                                else:
+                                    break
+                                slip_x_new=slip_x_new+1   
+                            self.board[slip_x_new-1][slip_y_old]=10
+                            self.board[slip_x_old][slip_y_old]=1
+                            self.turn = "Human"
+                            return
+                            
+                        elif slip_y_old==slip_y_new and slip_x_new==slip_x_old-1:
+                            print("up")
+                            for i in range(slip_x_old+1):
+                                if self.board[slip_x_new][slip_y_old]==1:
+                                    pass
+                                else:
+                                    break
+                                slip_x_new=slip_x_new-1   
+                            self.board[slip_x_new+1][slip_y_old]=10
+                            self.board[slip_x_old][slip_y_old]=1
+                            self.turn = "Human"
+                            return
+                        else:
+                            self.turn = "Human"
+                            return                            
                     try:
                         x1 = 540
                         x2 = 600
@@ -516,10 +639,10 @@ class Game(arcade.View):
                             y1 = y1-60
                             x1 = 540
                             x2 = 600
-                        # print("turning to Human:bot2")
+                      
                         self.turn = "Human"
                     except Exception:
-                        pass
+                        pass             
             try:
                 win = 0
                 for i in range(10):
