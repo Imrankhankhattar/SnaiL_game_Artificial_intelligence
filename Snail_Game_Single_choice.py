@@ -114,16 +114,17 @@ class Game(arcade.View):
     def on_mouse_press(self, x, y, _button, _modifiers):
         if self.state == "GameOn":
             if self.turn == "Human":
-                for i in range(9, -1, -1):# finding snail position
-                    for j in range(10):
-                        if self.board[i][j] == 20:
-                            slip_x_old=i
-                            slip_y_old=j
-                            break
+                
                     Sum = 0
                     Row_num = 0
                     col_num = 0
                     check_variable = 0
+                    for i in range(9, -1, -1):# finding snail position
+                        for j in range(10):
+                            if self.board[i][j] == 20:
+                                slip_x_old=i
+                                slip_y_old=j
+                                break
                     try:  # restricting user 
                         x1 = 0
                         x2 = 60
