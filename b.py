@@ -132,9 +132,11 @@ class Game(arcade.View):
                         for i in range(9, -1, -1):
                             for j in range(10):
                                 if x1 <= x <= x2 and y1 <= y <= y2:
-                                    if self.board[i][j] == 10 or self.board[i][j]==1:
-                                        self.turn="bot"
-                                        return
+                                    # if self.board[i][j] == 10 or self.board[i][j]==1:
+                                    #     self.turn="bot"
+                                    #     return
+                                    if self.board[i][j] == 20:	                                    
+                                        check_variable += 1
                                     elif self.board[i][j] == 2:#checking if user clicks on his own track.....
                                         check_variable = 11    
                                         slip_x_new=i
@@ -284,13 +286,15 @@ class Game(arcade.View):
                         for i in range(10):
                             for j in range(9, -1, -1):
                                 if x1 <= x <= x2 and y1 <= y <= y2:
-                                    if self.board[i][j] == 20 or self.board[i][j] == 2:
-                                        self.turn="Human"  
-                                        return
-                                    elif self.board[i][j] == 1:
+                                    # if self.board[i][j] == 20 or self.board[i][j] == 2:
+                                    #     self.turn="Human"  
+                                    #     return
+                                    if self.board[i][j] == 1:
                                         check_variable = 11    
                                         slip_x_new=i
                                         slip_y_new=j 
+                                    elif self.board[i][j] == 10:	                                 
+                                        check_variable += 1      
                                     elif self.board[i][j] != 0:
                                         check_variable += 1
                                     elif self.board[i][j] == 0:
